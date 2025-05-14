@@ -20,4 +20,6 @@ sc
 spark = SparkSession.builder.getOrCreate()
 print(spark)
 
+path = os.getenv("DATA_PATH")
+
 df = data(path,spark)
