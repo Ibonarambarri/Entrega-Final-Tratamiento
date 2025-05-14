@@ -2,8 +2,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col, window
 from pyspark.sql.types import StructType, StringType, TimestampType
 
-# 👉 Aquí va tu bloque
-KAFKA_BOOTSTRAP_SERVERS = "event-generator-private-ip:9094"   # CAMBIA por tu IP o localhost
+KAFKA_BOOTSTRAP_SERVERS = "172.31.90.62:9094"    # CAMBIA por tu IP o localhost
 KAFKA_TOPIC = "news_events"
 
 event_schema = StructType() \
@@ -18,7 +17,7 @@ event_schema = StructType() \
 spark = SparkSession.builder.appName("FinanceCountries").getOrCreate()
 
 df = spark.readStream.format("kafka") \
-    .option("kafka.bootstrap.servers", "event-generator-private-ip:9094") \
+    .option("kafka.bootstrap.servers", KAFKA_BOOTSTRAP_SERVERS) \
     .option("subscribe", "news_events").load()
 
 df = df.selectExpr("CAST(value AS STRING)") \
