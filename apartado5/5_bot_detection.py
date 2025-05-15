@@ -2,7 +2,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col, window
 from pyspark.sql.types import StructType, StringType, TimestampType
 
-KAFKA_BOOTSTRAP_SERVERS = "172.31.90.62:9094"   # CAMBIA por tu IP o localhost
+KAFKA_BOOTSTRAP_SERVERS = "172.31.84.18:9092"   # CAMBIA por tu IP o localhost
 KAFKA_TOPIC = "news_events"
 
 event_schema = StructType() \
