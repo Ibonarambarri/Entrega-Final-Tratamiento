@@ -54,7 +54,7 @@ def load_data(path,spark):
     df = spark.read.format("csv") \
         .option("header", "true") \
         .schema(schema) \
-        .load("data/yellow_tripdata_2016-03.csv")
+        .load(path)
     
     # Mostrar las primeras filas para verificar que los datos se cargaron correctamente
     print("Muestra de los datos originales:")
