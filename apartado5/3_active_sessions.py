@@ -30,5 +30,5 @@ sessions = df.withWatermark("event_time", "5 minutes") \
 
 result = sessions.groupBy("location").count()
 
-query = result.writeStream.outputMode("complete").format("console").start()
+query = result.writeStream.outputMode("update").format("console").start()
 query.awaitTermination()

@@ -29,5 +29,5 @@ result = finance.withWatermark("event_time", "15 minutes") \
     .groupBy(window(col("event_time"), "15 minutes"), col("location")) \
     .count().orderBy(col("count").desc())
 
-query = result.writeStream.outputMode("complete").format("console").start()
+query = result.writeStream.outputMode("update").format("console").start()
 query.awaitTermination()
