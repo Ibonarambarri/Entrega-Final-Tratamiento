@@ -26,7 +26,7 @@ df = df.selectExpr("CAST(value AS STRING)") \
 
 result = df.withWatermark("event_time", "10 minutes") \
     .groupBy(window(col("event_time"), "10 minutes"), "article_id") \
-    .count().filter(col("count") > 250)
+    .count().filter(col("count") > 10)
 
 query = result.writeStream.outputMode("update").format("console").start()
 query.awaitTermination()
