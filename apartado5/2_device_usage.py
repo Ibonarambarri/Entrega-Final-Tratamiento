@@ -25,5 +25,5 @@ df = df.selectExpr("CAST(value AS STRING)") \
 
 result = df.groupBy("device_type").count()
 
-query = result.writeStream.outputMode("update").format("console").start()
+query = result.writeStream.outputMode("complete").format("console").start()
 query.awaitTermination()
