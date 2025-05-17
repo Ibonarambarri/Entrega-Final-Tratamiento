@@ -33,7 +33,7 @@ def main():
     result.coalesce(1).write \
     .mode("overwrite") \
     .option("header", "true") \
-    .csv("hdfs://hadoop-master:9000/home/ec2-user/results/q4")
+    .csv("hdfs://hadoop-master:9000/home/ec2-user/results/q5")
     
     # Stop the Spark session
     spark.stop()
