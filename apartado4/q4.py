@@ -11,7 +11,7 @@ def main():
         .getOrCreate()
 
     # Input file path (adjust path as needed)
-    file_path = "/home/osboxes/Downloads/project/yellow_tripdata_2015-01.csv"
+    file_path = "/home/ec2-user/yellow_tripdata_2015-01.csv"
 
     # Load data using load_data (already includes add_quadrants and timestamp parsing)
     df = load_data(file_path, spark)
