@@ -17,7 +17,7 @@ def main():
     df = load_data(file_path, spark)
     
     # Calcular métricas de propinas por cuadrante de destino
-    tip_metrics_by_destination = df.groupBy("dropoff_quadrant") \
+    result = df.groupBy("dropoff_quadrant") \
         .agg(
             avg("tip_amount").alias("avg_tip"),
             avg(col("tip_amount") / col("fare_amount")).alias("tip_percentage"),
@@ -27,11 +27,13 @@ def main():
         .orderBy(col("avg_tip").desc())
     
     print("\nDistribución de propinas por área de destino:")
-    tip_metrics_by_destination.show()
+    result.show()
     
     # Guardar los resultados como CSV para análisis posterior
-    tip_metrics_by_destination.coalesce(1).write.mode("overwrite").option("header", "true").csv("resultados/propinas_por_destino")
-    print("Resultados guardados en el directorio 'resultados/propinas_por_destino'")
+    result.coalesce(1).write \
+    .mode("overwrite") \
+    .option("header", "true") \
+    .csv("hdfs://hadoop-master:9000/home/ec2-user/results/q4")
     
     # Stop the Spark session
     spark.stop()

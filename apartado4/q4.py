@@ -28,7 +28,10 @@ def main():
     result.show()
 
     # Save to HDFS (optional)
-    # result.write.mode("overwrite").csv("hdfs://<your-hdfs-path>/query4_result")
+    result.coalesce(1).write \
+    .mode("overwrite") \
+    .option("header", "true") \
+    .csv("hdfs://hadoop-master:9000/home/ec2-user/results/q4")
 
     # Stop the Spark session
     spark.stop()

@@ -37,8 +37,12 @@ def main():
     result.show()
     
     # Guardar los resultados como CSV
-    result.coalesce(1).write.mode("overwrite").option("header", "true").csv("resultados/viajes_por_dia")
-    print("Resultados guardados en el directorio 'resultados/viajes_por_dia'")
+
+    # Guardar resultados
+    result.coalesce(1).write \
+    .mode("overwrite") \
+    .option("header", "true") \
+    .csv("hdfs://hadoop-master:9000/home/ec2-user/results/q2")
     
     # Stop the Spark session
     spark.stop()
