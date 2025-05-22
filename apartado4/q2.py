@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, count, avg, when
+from pyspark.sql.functions import col, count, avg, when, percentile_approx, array, lit
 
 # Import load_data and add_quadrants from load_data.py
 from load_data import load_data, add_quadrants
@@ -7,7 +7,7 @@ from load_data import load_data, add_quadrants
 def main():
     # Initialize Spark session
     spark = SparkSession.builder \
-        .appName("Query_2_Trips_By_Day") \
+        .appName("Query_2_Enhanced_Trips_By_Day") \
         .getOrCreate()
 
     # Input file path (adjust as needed)
@@ -16,11 +16,12 @@ def main():
     # Load data using load_data
     df = load_data(file_path, spark)
     
-    # Número de viajes e ingreso promedio por día de la semana
+    # Número de viajes, ingreso promedio y percentiles por día de la semana
     result = df.groupBy("day_of_week") \
         .agg(
             count("*").alias("trip_count"),
-            avg("total_amount").alias("avg_income")
+            avg("total_amount").alias("avg_income"),
+            percentile_approx("total_amount", array(lit(0.25), lit(0.5), lit(0.75))).alias("income_quartiles")
         ) \
         .orderBy(
             # Ordenar por día de la semana (lunes a domingo)
@@ -33,11 +34,9 @@ def main():
             .when(col("day_of_week") == "Sunday", 7)
         )
     
-    print("\nNúmero de viajes e ingreso promedio por día de la semana:")
+    print("\nAnálisis de viajes por día con percentiles de ingresos:")
     result.show()
     
-    # Guardar los resultados como CSV
-
     # Guardar resultados
     result.coalesce(1).write \
     .mode("overwrite") \
