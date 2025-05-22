@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, count, avg, when, percentile_approx, array, lit
+from pyspark.sql.functions import col, count, avg, when, percentile_approx, lit
 
 # Import load_data and add_quadrants from load_data.py
 from load_data import load_data, add_quadrants
@@ -21,7 +21,9 @@ def main():
         .agg(
             count("*").alias("trip_count"),
             avg("total_amount").alias("avg_income"),
-            percentile_approx("total_amount", array(lit(0.25), lit(0.5), lit(0.75))).alias("income_quartiles")
+            percentile_approx("total_amount", lit(0.25)).alias("income_q1"),
+            percentile_approx("total_amount", lit(0.5)).alias("income_median"),
+            percentile_approx("total_amount", lit(0.75)).alias("income_q3")
         ) \
         .orderBy(
             # Ordenar por día de la semana (lunes a domingo)
@@ -41,7 +43,7 @@ def main():
     result.coalesce(1).write \
     .mode("overwrite") \
     .option("header", "true") \
-    .csv("hdfs://hadoop-master:9000/home/ec2-user/results/q2")
+    .csv("hdfs://hadoop-master:9000/home/ec2-user/results/q2_enhanced")
     
     # Stop the Spark session
     spark.stop()
